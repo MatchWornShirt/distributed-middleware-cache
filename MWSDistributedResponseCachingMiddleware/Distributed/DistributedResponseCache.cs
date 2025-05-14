@@ -30,9 +30,13 @@ namespace ExternalNetcoreExtensions.Distributed
 		public async Task<IResponseCacheEntry> GetAsync(string key)
 		{
 			var bytes = await cache.GetAsync(key);
+			var cacheHitSpanKey = "cache.hit";
+
+			using var activity = ResponseCachingExtensions.StartActivity("DistributedResponseCache");
 
 			if (bytes == null)
 			{
+				activity?.SetTag(cacheHitSpanKey, false);
 				return null;
 			}
 
@@ -43,16 +47,19 @@ namespace ExternalNetcoreExtensions.Distributed
 
 			if (cachedType == typeof(SerializableCachedResponse).Name)
 			{
+				activity?.SetTag(cacheHitSpanKey, true);
 				var data = await JsonSerializer.DeserializeAsync<SerializableCachedResponse>(stream);
 				return data?.ToCachedResponse();
 			}
 			else if (cachedType == typeof(SerializableCacheVaryByRules).Name)
 			{
+				activity?.SetTag(cacheHitSpanKey, true);
 				var data = await JsonSerializer.DeserializeAsync<SerializableCacheVaryByRules>(stream);
 				return data?.ToCachedVaryByRules();
 			}
 			else
 			{
+				activity?.SetTag(cacheHitSpanKey, false);
 				return null;
 			}
 		}

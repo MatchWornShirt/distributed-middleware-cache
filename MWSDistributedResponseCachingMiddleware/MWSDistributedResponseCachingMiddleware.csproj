@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
 	<LangVersion>Latest</LangVersion>
-	<Version>6.0.0-rc.2</Version>
-	<Description>An alternative to Microsoft.AspNetCore.ResponseCaching, which supports IDistributedCache, allows custom reponse caches, and provides a modifiable distributed response cache, which uses an injecting distributed cache, and options which allow clearing or ignoring the cache.
-It uses Microsoft.AspNetCore.ResponseCaching internally (via git submodule and linking in csproj)</Description>
+	<Version>9.1.1</Version>
+	<Description>[Fork from yringler/distributed-middleware-cache] An alternative to Microsoft.AspNetCore.ResponseCaching, which supports IDistributedCache, allows custom reponse caches, and provides a modifiable distributed response cache, which uses an injecting distributed cache, and options which allow clearing or ignoring the cache.
+It uses Microsoft.AspNetCore.ResponseCaching internally (via git submodule and linking in csproj). This fork also is upgraded to net9.0 and has tracing enabled to see the span `cache.hit`.</Description>
 	<PackageProjectUrl></PackageProjectUrl>
-	<RepositoryUrl>https://github.com/yringler/distributed-middleware-cache</RepositoryUrl>
+	<RepositoryUrl>https://github.com/matchwornshirt/distributed-middleware-cache</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -25,7 +25,7 @@ It uses Microsoft.AspNetCore.ResponseCaching internally (via git submodule and l
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\DistributedResponseCachingMiddleware.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\MWSDistributedResponseCachingMiddleware.xml</DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE</DefineConstants>
@@ -34,7 +34,7 @@ It uses Microsoft.AspNetCore.ResponseCaching internally (via git submodule and l
 
 	<ItemGroup>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-			<_Parameter1>DistributedResponseCachingMiddlewareTests</_Parameter1>
+			<_Parameter1>MWSDistributedResponseCachingMiddlewareTests</_Parameter1>
 		</AssemblyAttribute>
 		<Compile Include="..\aspnetcore\src\Middleware\ResponseCaching\src\**\*.cs" Exclude="..\aspnetcore\src\Middleware\ResponseCaching\src\obj\**\*.*">
 			<Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
@@ -45,9 +45,9 @@ It uses Microsoft.AspNetCore.ResponseCaching internally (via git submodule and l
 	  <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
 	  <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />
 	  <PackageReference Include="Microsoft.AspNetCore.ResponseCaching.Abstractions" Version="2.2.0" />
-	  <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0-rc.2.21480.5" />
-	  <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0-rc.2.21480.5" />
-	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0-rc.2.21480.5" />
+	  <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="9.0.0-rc.2.21480.5" />
+	  <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.0-rc.2.21480.5" />
+	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0-rc.2.21480.5" />
 	  <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

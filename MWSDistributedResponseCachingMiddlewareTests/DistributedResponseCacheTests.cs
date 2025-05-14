@@ -13,7 +13,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 
-namespace DistributedResponseCachingMiddlewareTests
+namespace MWSDistributedResponseCachingMiddlewareTests
 {
 	[TestFixture]
 	public class DistributedResponseCacheTests
