@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace ExternalNetcoreExtensions.Distributed
 {
@@ -27,16 +28,21 @@ namespace ExternalNetcoreExtensions.Distributed
 			return GetAsync(key).Result;
 		}
 
+		private void SetSpanTags(Activity activity, string key, bool cacheHit)
+		{
+			activity?.SetTag("cache.key", key);
+			activity?.SetTag("cache.hit", cacheHit);
+		}
+
 		public async Task<IResponseCacheEntry> GetAsync(string key)
 		{
 			var bytes = await cache.GetAsync(key);
-			var cacheHitSpanKey = "cache.hit";
 
 			using var activity = ResponseCachingExtensions.StartActivity("DistributedResponseCache");
 
 			if (bytes == null)
 			{
-				activity?.SetTag(cacheHitSpanKey, false);
+				SetSpanTags(activity, key, false);
 				return null;
 			}
 
@@ -47,19 +53,19 @@ namespace ExternalNetcoreExtensions.Distributed
 
 			if (cachedType == typeof(SerializableCachedResponse).Name)
 			{
-				activity?.SetTag(cacheHitSpanKey, true);
+				SetSpanTags(activity, key, true);
 				var data = await JsonSerializer.DeserializeAsync<SerializableCachedResponse>(stream);
 				return data?.ToCachedResponse();
 			}
 			else if (cachedType == typeof(SerializableCacheVaryByRules).Name)
 			{
-				activity?.SetTag(cacheHitSpanKey, true);
+				SetSpanTags(activity, key, true);
 				var data = await JsonSerializer.DeserializeAsync<SerializableCacheVaryByRules>(stream);
 				return data?.ToCachedVaryByRules();
 			}
 			else
 			{
-				activity?.SetTag(cacheHitSpanKey, false);
+				SetSpanTags(activity, key, false);
 				return null;
 			}
 		}

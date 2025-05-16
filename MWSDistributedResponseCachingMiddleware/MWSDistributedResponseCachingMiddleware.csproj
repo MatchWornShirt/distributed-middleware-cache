@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
 	<LangVersion>Latest</LangVersion>
-	<Version>9.1.1</Version>
+	<Version>9.1.2</Version>
 	<Description>[Fork from yringler/distributed-middleware-cache] An alternative to Microsoft.AspNetCore.ResponseCaching, which supports IDistributedCache, allows custom reponse caches, and provides a modifiable distributed response cache, which uses an injecting distributed cache, and options which allow clearing or ignoring the cache.
 It uses Microsoft.AspNetCore.ResponseCaching internally (via git submodule and linking in csproj). This fork also is upgraded to net9.0 and has tracing enabled to see the span `cache.hit`.</Description>
 	<PackageProjectUrl></PackageProjectUrl>
